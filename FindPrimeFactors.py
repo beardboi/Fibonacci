@@ -88,6 +88,7 @@ def app():
     # Using the pool to calculate
     fibNumber = pool.map(fibonacci, maxRange)
 
+    # Printing the fib numbers along with its factors
     for fib in fibNumber:
         print(f'{fib} =', end=" ")
         factorization(fib)
@@ -102,3 +103,4 @@ def app():
 # The entry point of the app.
 if __name__ == '__main__':
     app()
+
