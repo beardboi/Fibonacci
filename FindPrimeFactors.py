@@ -16,15 +16,20 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import math
+import multiprocessing as mp
+import time
 
 
 # The function return the fibonacci number.
 def fibonacci(number):
+
     if number < 2:
+        # If the number is below 2, just return it
         return number
     else:
-        result = fibonacci(number - 2) + fibonacci(number - 1)
-        return result
+        # Calculate fibonacci
+        fibNumber = (fibonacci(number - 1) + fibonacci(number - 2))
+        return fibNumber
 
 
 # This functions find all the prime factors given certain number.
@@ -64,25 +69,36 @@ def factorization(number):
 
 
 # The main program.
-def main():
+def app():
+    # Number of CPU cores
+    cpu_cores = mp.cpu_count()
+
+    # The pool
+    pool = mp.Pool(cpu_cores)
+
     print('App started it, computing the fibonacci sequence...')
     print(' ')
 
-    # Loop trough all the fib numbers.
-    for i in range(300):
-        # Calculate and save the fib number.
-        fibNumber = fibonacci(i + 1)
+    # Take the time
+    start_time = time.perf_counter()
 
-        print(f'{i + 1} - {fibNumber} =', end=' ')
-        factorization(fibNumber)
+    # The 'iterable object' for the map method
+    maxRange = range(1, 300)
 
-    print('Done.')
+    # Using the pool to calculate
+    fibNumber = pool.map(fibonacci, maxRange)
 
+    for fib in fibNumber:
+        print(f'{fib} =', end=" ")
+        factorization(fib)
 
-def test():
-    factorization(14930352)
+    # Stop taking time
+    finish_time = time.perf_counter()
+    execution_time = finish_time - start_time
+
+    print(f'\nDone, execution time: {execution_time} (s)')
 
 
 # The entry point of the app.
 if __name__ == '__main__':
-    main()
+    app()
